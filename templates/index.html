@@ -30,7 +30,7 @@
 
                         <div class="mb-3">
                             <label class="form-label">Clave del usuario</label>
-                            <input type="text" class="form-control" name="key" required>
+                            <input type="password" class="form-control" name="key" required>
                         </div>
 
                         <button class="btn btn-primary w-100" type="submit">
@@ -54,6 +54,11 @@
                         <div class="mb-3">
                             <label class="form-label">Archivo .des</label>
                             <input type="file" class="form-control" name="file" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Clave del usuario</label>
+                            <input type="password" class="form-control" name="key" required>
                         </div>
 
                         <button class="btn btn-success w-100" type="submit">
@@ -89,7 +94,6 @@
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
 
-            // Descargar automáticamente
             const a = document.createElement("a");
             a.href = url;
             a.download = "encrypted_file.des";
