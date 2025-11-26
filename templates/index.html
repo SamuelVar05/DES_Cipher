@@ -1,9 +1,138 @@
-<form action="/api/encrypt" method="POST" enctype="multipart/form-data">
-    <input type="file" name="file">
-    <button type="submit">Encriptar</button>
-</form>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>DES Encrypt/Decrypt</title>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
 
-<form action="/api/decrypt" method="POST" enctype="multipart/form-data">
-    <input type="file" name="file">
-    <button type="submit">Desencriptar</button>
-</form>
+<body class="bg-light">
+
+<div class="container py-5">
+    <h2 class="text-center mb-4">🔐 Encriptación y Desencriptación DES</h2>
+
+    <div class="row">
+
+        <!-- ENCRIPTAR -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    Encriptar archivo
+                </div>
+                <div class="card-body">
+
+                    <form id="encryptForm">
+                        <div class="mb-3">
+                            <label class="form-label">Archivo</label>
+                            <input type="file" class="form-control" name="file" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Clave del usuario</label>
+                            <input type="text" class="form-control" name="key" required>
+                        </div>
+
+                        <button class="btn btn-primary w-100" type="submit">
+                            Encriptar
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- DESENCRIPTAR -->
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    Desencriptar archivo
+                </div>
+                <div class="card-body">
+
+                    <form id="decryptForm">
+                        <div class="mb-3">
+                            <label class="form-label">Archivo .des</label>
+                            <input type="file" class="form-control" name="file" required>
+                        </div>
+
+                        <button class="btn btn-success w-100" type="submit">
+                            Desencriptar
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Área de mensajes -->
+    <div class="mt-4" id="result"></div>
+
+</div>
+
+
+<script>
+    // --- Encriptar archivo ---
+    document.getElementById("encryptForm").onsubmit = async function(e) {
+        e.preventDefault();
+
+        let formData = new FormData(this);
+
+        let response = await fetch("/api/encrypt", {
+            method: "POST",
+            body: formData
+        });
+
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+
+            // Descargar automáticamente
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "encrypted_file.des";
+            a.click();
+
+            document.getElementById("result").innerHTML =
+                "<div class='alert alert-success'>Archivo encriptado correctamente.</div>";
+        } else {
+            document.getElementById("result").innerHTML =
+                "<div class='alert alert-danger'>Error al encriptar.</div>";
+        }
+    };
+
+
+    // --- Desencriptar archivo ---
+    document.getElementById("decryptForm").onsubmit = async function(e) {
+        e.preventDefault();
+
+        let formData = new FormData(this);
+
+        let response = await fetch("/api/decrypt", {
+            method: "POST",
+            body: formData
+        });
+
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "decrypted_file";
+            a.click();
+
+            document.getElementById("result").innerHTML =
+                "<div class='alert alert-info'>Archivo desencriptado correctamente.</div>";
+        } else {
+            document.getElementById("result").innerHTML =
+                "<div class='alert alert-danger'>Error al desencriptar.</div>";
+        }
+    };
+
+</script>
+
+</body>
+</html>
