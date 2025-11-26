@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from routes.file_routes import file_routes
 import os
 
@@ -10,6 +10,10 @@ for folder in ["uploads", "uploads/encrypted", "uploads/decrypted"]:
         os.makedirs(folder)
 
 app.register_blueprint(file_routes, url_prefix="/api")
+
+@app.route("/")
+def home():
+    return render_template("index.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
