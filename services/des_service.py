@@ -7,32 +7,27 @@ class DESService:
     def __init__(self, key: bytes):
         self.key = key
 
-    def encrypt_file(self, input_path: str, output_path: str):
+    def encrypt_file(self, input_path, output_path):
         iv = os.urandom(8)
         cipher = DES.new(self.key, DES.MODE_CBC, iv)
 
         with open(input_path, "rb") as f:
             data = f.read()
 
-        padded = pad(data, DES.block_size)
-        encrypted = cipher.encrypt(padded)
+        encrypted = cipher.encrypt(pad(data, DES.block_size))
 
-        # Guardar IV + encrypted juntos
         with open(output_path, "wb") as f:
             f.write(iv + encrypted)
 
-        return iv
-
-    def decrypt_file(self, input_path: str, output_path: str):
+    def decrypt_file(self, input_path, output_path):
         with open(input_path, "rb") as f:
-            content = f.read()
+            raw = f.read()
 
-        iv = content[:8]
-        encrypted = content[8:]
+        iv = raw[:8]
+        encrypted = raw[8:]
 
         cipher = DES.new(self.key, DES.MODE_CBC, iv)
-        decrypted_padded = cipher.decrypt(encrypted)
-        decrypted = unpad(decrypted_padded, DES.block_size)
+        decrypted = unpad(cipher.decrypt(encrypted), DES.block_size)
 
         with open(output_path, "wb") as f:
             f.write(decrypted)
