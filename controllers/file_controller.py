@@ -16,10 +16,6 @@ def handle_encrypt(file, user_key):
     input_path = os.path.join(UPLOAD_DIR, filename)
     output_path = os.path.join(ENCRYPT_DIR, filename + ".des")
 
-    print(filename)
-    print(input_path)
-    print(output_path)
-
     # Guardar archivo subido
     file.save(input_path)
 

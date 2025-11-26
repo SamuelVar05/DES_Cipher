@@ -96,7 +96,15 @@
 
             const a = document.createElement("a");
             a.href = url;
-            a.download = "encrypted_file.des";
+            // Leer el nombre real del archivo desde los headers
+            const disposition = response.headers.get("Content-Disposition");
+            let filename = "archivo_encriptado.des"; // fallback
+
+            if (disposition && disposition.includes("filename=")) {
+                filename = disposition.split("filename=")[1].replace(/"/g, '');
+            }
+
+            a.download = filename;
             a.click();
 
             document.getElementById("result").innerHTML =
@@ -125,7 +133,15 @@
 
             const a = document.createElement("a");
             a.href = url;
-            a.download = "decrypted_file";
+            // Leer el nombre real del archivo desde los headers
+            const disposition = response.headers.get("Content-Disposition");
+            let filename = "archivo_desencriptado"; // fallback
+
+            if (disposition && disposition.includes("filename=")) {
+                filename = disposition.split("filename=")[1].replace(/"/g, '');
+            }
+
+            a.download = filename;
             a.click();
 
             document.getElementById("result").innerHTML =
