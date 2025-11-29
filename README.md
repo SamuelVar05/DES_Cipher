@@ -39,8 +39,8 @@ por el algoritmo DES.
 ### 1. Clonar el repositorio
 
 ``` bash
-git clone <url-del-repositorio>
-cd project
+git clone https://github.com/SamuelVar05/DES_Cipher
+cd DES_CIPHER
 ```
 
 ### 2. Crear entorno virtual (opcional)
